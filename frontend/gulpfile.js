@@ -163,7 +163,7 @@ function buildStyles() {
 /**
  * Compile jade templates to html.
  */
-function buildjade() {
+function buildJade() {
 	var jadePipe = lazypipe()
 		.pipe(plumber, { errorHandler: util.log })
 		.pipe(jade, { pretty: true, locals: {buildCfg: cfg } })
