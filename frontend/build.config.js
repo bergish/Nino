@@ -11,10 +11,10 @@ module.exports = {
 	 */
 	appFiles: {
 		js: 'src/js/**/*.js',
-		jade: 'src/jade/**/*.jade',
+		jade: 'src/jade/templates/**/*.jade',
 		less: 'src/less/*.less',
 		css: 'src/css/**/*.css',
-		stylues: 'src/stylus/**/*.styl',
+		stylus: 'src/stylus/**/*.styl',
 		compiledCss: 'compile/css/**/*.css'
 	},
 	
@@ -28,5 +28,5 @@ module.exports = {
 		]
 	},
 	
-	livereloadPort: 35729
+	liveReloadPort: 35729
 };
