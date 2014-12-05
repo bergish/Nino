@@ -2,8 +2,6 @@
  * This file/module contains all the configurations for the build process.
  */
 
-var join = require('path').join;
-
 
 module.exports = {
 	/**

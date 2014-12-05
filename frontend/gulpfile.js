@@ -1,9 +1,7 @@
 var path = require('path');
 var gulp = require('gulp');
 var util = require('gulp-util');
-var uglify = require('gulp-uglify');
 var less = require('gulp-less');
-var htmlmin = require('gulp-htmlmin');
 var concat = require('gulp-concat');
 var stylus = require('gulp-stylus');
 var jade = require('gulp-jade');
@@ -116,7 +114,6 @@ function buildJs() {
 		// Allows watching file and not 'crashing' when a file cannot be compiled.
 		.pipe(plumber, { errorHandler: util.log })
 		.pipe(concat, 'app.js')
-		//.pipe(uglify())
 		.pipe(gulp.dest, 'build');
 		
 	return jsPipe();
