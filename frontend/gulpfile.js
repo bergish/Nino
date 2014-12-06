@@ -76,7 +76,7 @@ gulp.task('watch', ['build'], function () {
         function (files) {
             return gulp.src(cfg.appFiles.js)
                 .pipe(buildJs())
-                .pipe(livereload(cfg.livereloadPort));
+                .pipe(livereload(cfg.liveReloadPort));
         });
 
     watch(cfg.appFiles.jade,
@@ -87,7 +87,7 @@ gulp.task('watch', ['build'], function () {
         function (files) {
             return gulp.src(cfg.appFiles.jade)
                 .pipe(buildJade())
-                .pipe(livereload(cfg.livereloadPort));
+                .pipe(livereload(cfg.liveReloadPort));
         });
 
     // Less and Stylus can recompile only changed files since a separate watch (Css)
@@ -120,7 +120,7 @@ gulp.task('watch', ['build'], function () {
         function (files) {
             return gulp.src(cfg.apFiles.compiledCss)
                 .pipe(buildStyles())
-                .pipe(livereload(cfg.liverelaodPort));
+                .pipe(livereload(cfg.liveReloadPort));
         });
 
     watch(cfg.appFiles.css,
@@ -130,7 +130,7 @@ gulp.task('watch', ['build'], function () {
         },
         function (files) {
             return files
-                .pipe(livereload(cfg.livereloadPort));
+                .pipe(livereload(cfg.liveReloadPort));
         });
 });
 

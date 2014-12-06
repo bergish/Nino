@@ -1,6 +1,5 @@
 
-//+ var sdn-base-url = "//ajax.googleapis.com/ajax/libs"
-SDN_URL = "//ajax.googleapis.com/ajax/libs"
+- var SDN_URL = "//ajax.googleapis.com/ajax/libs"
 
 
 mixin script(url)
@@ -12,8 +11,8 @@ mixin style(url)
 
 
 mixin script-cdn(relativeUrl)
-    +script("#{SDN_URL}#{relativeUrl}")
+    +script(SDN_URL + relativeUrl)
 
 
 mixin style-cdn(relativeUrl)
-    +style("#{SDN_URL}#{relativeUrl}")
+    +style(SDN_URL + relativeUrl)
