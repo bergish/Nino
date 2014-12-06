@@ -11,10 +11,12 @@ module.exports = {
 	 */
 	appFiles: {
 		js: 'src/js/**/*.js',
-		jade: 'src/jade/templates/**/*.jade',
-		less: 'src/less/*.less',
+		jade: 'src/jade/**/*.jade',
+        jadeTemplates: 'src/jade/templates/**/*.jade',
+		less: 'src/less/**/*.less',
 		css: 'src/css/**/*.css',
 		stylus: 'src/stylus/**/*.styl',
+        scss: 'src/scss/**/*.scss',
 		compiledCss: 'compile/css/**/*.css'
 	},
 	

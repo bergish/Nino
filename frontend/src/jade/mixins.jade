@@ -1,13 +1,10 @@
-
-- var SDN_URL = "//ajax.googleapis.com/ajax/libs"
-
-
+- var SDN_URL = "//cdnjs.cloudflare.com/ajax/libs/"
 mixin script(url)
-    script(type="text/javascript", src="#{script}")
+    script(type="text/javascript", src="#{url}")
 
 
 mixin style(url)
-    link(type="text/css", rel="stylesheet", src="#{url}")
+    link(type="text/css", rel="stylesheet", href="#{url}")
 
 
 mixin script-cdn(relativeUrl)

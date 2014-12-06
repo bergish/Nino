@@ -10,6 +10,7 @@ var livereload = require('gulp-livereload');
 var watch = require('gulp-watch');
 var plumber = require('gulp-plumber');
 var lazypipe = require('lazypipe');
+var sass = require('gulp-sass')
 
 // Load user config and package data.
 var cfg = require('./build.config.js');
@@ -42,12 +43,18 @@ gulp.task('build-styles-stylus', ['clean'], function () {
     return gulp.src(cfg.appFiles.stylus).pipe(buildStylus());
 });
 
-gulp.task('build-styles', ['build-styles-less', 'build-styles-stylus'], function () {
-    return gulp.src(cfg.appFiles.compiledCss).pipe(buildStyles());
+gulp.task('build-styles-sass', ['clean'], function () {
+    return gulp.src(cfg.appFiles.scss).pipe(buildSass());
 });
 
+gulp.task('build-styles',
+    ['build-styles-less', 'build-styles-stylus', 'build-styles-sass'],
+    function () {
+        return gulp.src(cfg.appFiles.compiledCss).pipe(buildStyles());
+    });
+
 gulp.task('build-templates', ['clean'], function () {
-    return gulp.src(cfg.appFiles.jade).pipe(buildJade());
+    return gulp.src(cfg.appFiles.jadeTemplates).pipe(buildJade());
 });
 
 /**
@@ -85,7 +92,7 @@ gulp.task('watch', ['build'], function () {
             name: 'Templates'
         },
         function (files) {
-            return gulp.src(cfg.appFiles.jade)
+            return gulp.src(cfg.appFiles.jadeTemplates)
                 .pipe(buildJade())
                 .pipe(livereload(cfg.liveReloadPort));
         });
@@ -112,13 +119,23 @@ gulp.task('watch', ['build'], function () {
                 .pipe(buildStylus())
         });
 
+    watch(cfg.appFiles.scss,
+        {
+            emitOnGlob: false,
+            name: 'Sass'
+        },
+        function (files) {
+            return files
+                .pipe(buildSass())
+        });
+
     watch(cfg.appFiles.compiledCss,
         {
             emitOnGlob: false,
             name: 'Css'
         },
         function (files) {
-            return gulp.src(cfg.apFiles.compiledCss)
+            return gulp.src(cfg.appFiles.compiledCss)
                 .pipe(buildStyles())
                 .pipe(livereload(cfg.liveReloadPort));
         });
@@ -149,6 +166,7 @@ function buildJs() {
     return jsPipe();
 }
 
+
 /**
  * Compile less styles to css.
  */
@@ -171,6 +189,19 @@ function buildStylus() {
         .pipe(plumber, { errorHandler: util.log })
         .pipe(stylus)
         .pipe(gulp.dest, 'compile/css/stylus');
+
+    return stylusPipe();
+}
+
+
+/**
+ * Compile sass styles to css.
+ */
+function buildSass() {
+    var stylusPipe = lazypipe()
+        .pipe(plumber, { errorHandler: util.log })
+        .pipe(sass)
+        .pipe(gulp.dest, 'compile/css/sass');
 
     return stylusPipe();
 }
