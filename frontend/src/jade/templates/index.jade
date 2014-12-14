@@ -16,7 +16,7 @@ html(lang="en", ng-app="BoilerplateApp")
 		// Including livereload in production will cause a performance hit for users,
 		// so django will not emit the following line if the settings are not set to debug.
 		// buildCfg is provided by gulp and is the same as build.config.js.
-		+script("http://localhost:" = buildCfg.livereloadPort + "/livereload.js?snipver=1")
+		+script("http://localhost:" + buildCfg.liveReloadPort + "/livereload.js?snipver=1")
 		
 		{% endif %}
 		

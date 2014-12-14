@@ -2,8 +2,6 @@
  * This file/module contains all the configurations for the build process.
  */
 
-var join = require('path').join;
-
 
 module.exports = {
 	/**
@@ -14,9 +12,11 @@ module.exports = {
 	appFiles: {
 		js: 'src/js/**/*.js',
 		jade: 'src/jade/**/*.jade',
-		less: 'src/less/*.less',
+        jadeTemplates: 'src/jade/templates/**/*.jade',
+		less: 'src/less/**/*.less',
 		css: 'src/css/**/*.css',
-		stylues: 'src/stylus/**/*.styl',
+		stylus: 'src/stylus/**/*.styl',
+        scss: 'src/scss/**/*.scss',
 		compiledCss: 'compile/css/**/*.css'
 	},
 	
@@ -30,5 +30,5 @@ module.exports = {
 		]
 	},
 	
-	livereloadPort: 35729
+	liveReloadPort: 35729
 };
