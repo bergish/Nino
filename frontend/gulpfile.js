@@ -1,6 +1,7 @@
 var path = require('path');
 var gulp = require('gulp');
 var util = require('gulp-util');
+var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var concat = require('gulp-concat');
 var stylus = require('gulp-stylus');
@@ -10,21 +11,18 @@ var livereload = require('gulp-livereload');
 var watch = require('gulp-watch');
 var plumber = require('gulp-plumber');
 var lazypipe = require('lazypipe');
-var sass = require('gulp-sass')
 
-// Load user config and package data.
+// Load user config and package data
 var cfg = require('./build.config.js');
 
 /**
- * Compile and concat scripts, styles and templates. Invoked when running 'gulp' with
- * no other arguments.
- * The task first cleans the build folder (in gulp syntax, we say the 'default' task is
- * depended on the 'clean' to run.
+ * Compile and concat scripts, styles and templates. Invoked when running 'gulp' with no other arguments.
+ * The task first clean the build folder (in gulp syntax, we say the 'default' task is depended on the 'clean' to run.
  */
 gulp.task('default', ['build']);
 
 /**
- * A simple command which cleans the build directory.
+ * A simple command which clean the build directory.
  */
 gulp.task('clean', function () {
     return gulp.src(['build/**/*', 'compile/**/*'], { read: false })
@@ -38,28 +36,19 @@ gulp.task('build-scripts', ['clean'], function () {
 gulp.task('build-styles-less', ['clean'], function () {
     return gulp.src(cfg.appFiles.less).pipe(buildLess());
 });
-
 gulp.task('build-styles-stylus', ['clean'], function () {
     return gulp.src(cfg.appFiles.stylus).pipe(buildStylus());
 });
-
-gulp.task('build-styles-sass', ['clean'], function () {
-    return gulp.src(cfg.appFiles.scss).pipe(buildSass());
+gulp.task('build-styles', ['build-styles-less', 'build-styles-stylus'], function () {
+    return gulp.src(cfg.appFiles.compiledCss).pipe(buildStyles());
 });
 
-gulp.task('build-styles',
-    ['build-styles-less', 'build-styles-stylus', 'build-styles-sass'],
-    function () {
-        return gulp.src(cfg.appFiles.compiledCss).pipe(buildStyles());
-    });
-
 gulp.task('build-templates', ['clean'], function () {
-    return gulp.src(cfg.appFiles.jadeTemplates).pipe(buildJade());
+    return gulp.src(cfg.appFiles.jade).pipe(buildJade());
 });
 
 /**
- * Actual build task. Note that we hint gulp to first run clean (since we say that
- * 'build' depends on it directly.
+ * Actual build task. Note that we hint gulp to first run clean (since we say that 'build' depend on it directly).
  */
 gulp.task('build', ['clean', 'build-scripts', 'build-styles', 'build-templates']);
 
@@ -70,102 +59,57 @@ gulp.task('watch', ['build'], function () {
     // Create the server so it will start listening.
 
     // Setup watchers.
-    // Most watchers must do a full 'compilation' when a change is detected (e.g.
-    // JavaScript must concat all files even if only one is changed,
-    // and Jade must recompile all files since a change to a template can affect other pages.)
-    var liveReloadServer = livereload(cfg.liveReloadPort);
+    // Most watchers must do a full 'compilation' when a chagne is detected (e.g, JavaScript must concat all files even 
+    // if only one is changed, Jade must recompile all files since a change to a template can affect other pages.)
+    var livereloadServer = livereload(cfg.livereloadPort);
 
-    watch(cfg.appFiles.js,
-        {
-            emitOnGlob: false,
-            name: 'JavaScript'
-        },
-        function (files) {
-            return gulp.src(cfg.appFiles.js)
-                .pipe(buildJs())
-                .pipe(livereload(cfg.liveReloadPort));
-        });
+    watch({ glob: cfg.appFiles.js, emitOnGlob: false, name: 'JavaScript' }, function (files) {
+        return gulp.src(cfg.appFiles.js)
+            .pipe(buildJs())
+            .pipe(livereload(cfg.livereloadPort));
+    });
 
-    watch(cfg.appFiles.jade,
-        {
-            emitOnGlob: false,
-            name: 'Templates'
-        },
-        function (files) {
-            return gulp.src(cfg.appFiles.jadeTemplates)
-                .pipe(buildJade())
-                .pipe(livereload(cfg.liveReloadPort));
-        });
+    watch({ glob: cfg.appFiles.jade, emitOnGlob: false, name: 'Templates' }, function (files) {
+        return gulp.src(cfg.appFiles.jade)
+            .pipe(buildJade())
+            .pipe(livereload(cfg.livereloadPort));
+    });
 
-    // Less and Stylus can recompile only changed files since a separate watch (Css)
-    // will concat all files always.
-    watch(cfg.appFiles.less,
-        {
-            emitOnGlob: false,
-            name: 'Less'
-        },
-        function (files) {
-            return files
-                .pipe(buildLess())
-        });
+    // Less and Stylus can recompile only changed files since a separate watch (Css) will concat all files allways.
+    watch({ glob: cfg.appFiles.less, emitOnGlob: false, name: 'Less' }, function (files) {
+        return files
+            .pipe(buildLess())
+    });
 
-    watch(cfg.appFiles.stylus,
-        {
-            emitOnGlob: false,
-            name: 'Stylus'
-        },
-        function (files) {
-            return files
-                .pipe(buildStylus())
-        });
+    watch({ glob: cfg.appFiles.stylus, emitOnGlob: false, name: 'Stylus' }, function (files) {
+        return files
+            .pipe(buildStylus())
+    });
 
-    watch(cfg.appFiles.scss,
-        {
-            emitOnGlob: false,
-            name: 'Sass'
-        },
-        function (files) {
-            return files
-                .pipe(buildSass())
-        });
+    watch({ glob: cfg.appFiles.compiledCss, emitOnGlob: false, name: 'Css' }, function (files) {
+        return gulp.src(cfg.appFiles.compiledCss)
+            .pipe(buildStyles())
+            .pipe(livereload(cfg.livereloadPort));
+    });
 
-    watch(cfg.appFiles.compiledCss,
-        {
-            emitOnGlob: false,
-            name: 'Css'
-        },
-        function (files) {
-            return gulp.src(cfg.appFiles.compiledCss)
-                .pipe(buildStyles())
-                .pipe(livereload(cfg.liveReloadPort));
-        });
-
-    watch(cfg.appFiles.css,
-        {
-            emitOnGlob: false,
-            name: 'Css'
-        },
-        function (files) {
-            return files
-                .pipe(livereload(cfg.liveReloadPort));
-        });
+    watch({ glob: cfg.appFiles.css, emitOnGlob: false, name: 'Css' }, function (files) {
+        return files
+            .pipe(livereload(cfg.livereloadPort));
+    });
 });
 
 /**
  * Concat js code to a single js file (and not vendor code).
  */
 function buildJs() {
-    // Lazy pipe can be attached to an existing pipe (e.g. gulp.src(..,).pipe(jsPipe)).
     var jsPipe = lazypipe()
-        // Plumber takes care of errors in the pipe (ignore them and print them to the log).
-        // Allows watching file and not 'crashing' when a file cannot be compiled.
-        .pipe(plumber, { errorHandler: util.log })
+
         .pipe(concat, 'app.js')
+        //.pipe(uglify())
         .pipe(gulp.dest, 'build');
 
     return jsPipe();
 }
-
 
 /**
  * Compile less styles to css.
@@ -193,21 +137,8 @@ function buildStylus() {
     return stylusPipe();
 }
 
-
 /**
- * Compile sass styles to css.
- */
-function buildSass() {
-    var stylusPipe = lazypipe()
-        .pipe(plumber, { errorHandler: util.log })
-        .pipe(sass)
-        .pipe(gulp.dest, 'compile/css/sass');
-
-    return stylusPipe();
-}
-
-/**
- * Compile all styles (less, stylus, etc...) to css and concat them to a single file.
+ * Compile all styles (less, stylus, etc.) to css and concat them to a single file.
  */
 function buildStyles() {
     var stylesPipe = lazypipe()
@@ -216,7 +147,7 @@ function buildStyles() {
         .pipe(gulp.dest, 'build');
 
     return stylesPipe();
-};
+}
 
 /**
  * Compile jade templates to html.
@@ -224,9 +155,8 @@ function buildStyles() {
 function buildJade() {
     var jadePipe = lazypipe()
         .pipe(plumber, { errorHandler: util.log })
-        .pipe(jade, { pretty: true, locals: {buildCfg: cfg } })
+        .pipe(jade, { pretty: true, locals: { buildCfg: cfg } })
         .pipe(gulp.dest, 'build');
 
     return jadePipe();
 }
- 

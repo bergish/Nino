@@ -1,0 +1,5 @@
+.idea/
+
+frontend/build/
+frontend/compile/
+frontend/node_modules/
