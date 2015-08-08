@@ -63,36 +63,36 @@ gulp.task('watch', ['build'], function () {
     // if only one is changed, Jade must recompile all files since a change to a template can affect other pages.)
     var livereloadServer = livereload(cfg.livereloadPort);
 
-    watch({ glob: cfg.appFiles.js, emitOnGlob: false, name: 'JavaScript' }, function (files) {
+    watch(cfg.appFiles.js, { emitOnGlob: false, name: 'JavaScript' }, function (files) {
         return gulp.src(cfg.appFiles.js)
             .pipe(buildJs())
             .pipe(livereload(cfg.livereloadPort));
     });
 
-    watch({ glob: cfg.appFiles.jade, emitOnGlob: false, name: 'Templates' }, function (files) {
+    watch(cfg.appFiles.jade, { emitOnGlob: false, name: 'Templates' }, function (files) {
         return gulp.src(cfg.appFiles.jade)
             .pipe(buildJade())
             .pipe(livereload(cfg.livereloadPort));
     });
 
     // Less and Stylus can recompile only changed files since a separate watch (Css) will concat all files allways.
-    watch({ glob: cfg.appFiles.less, emitOnGlob: false, name: 'Less' }, function (files) {
+    watch(cfg.appFiles.less, { emitOnGlob: false, name: 'Less' }, function (files) {
         return files
             .pipe(buildLess())
     });
 
-    watch({ glob: cfg.appFiles.stylus, emitOnGlob: false, name: 'Stylus' }, function (files) {
+    watch(cfg.appFiles.stylus, { emitOnGlob: false, name: 'Stylus' }, function (files) {
         return files
             .pipe(buildStylus())
     });
 
-    watch({ glob: cfg.appFiles.compiledCss, emitOnGlob: false, name: 'Css' }, function (files) {
+    watch(cfg.appFiles.compiledCss, { emitOnGlob: false, name: 'Css' }, function (files) {
         return gulp.src(cfg.appFiles.compiledCss)
             .pipe(buildStyles())
             .pipe(livereload(cfg.livereloadPort));
     });
 
-    watch({ glob: cfg.appFiles.css, emitOnGlob: false, name: 'Css' }, function (files) {
+    watch(cfg.appFiles.css, { emitOnGlob: false, name: 'Css' }, function (files) {
         return files
             .pipe(livereload(cfg.livereloadPort));
     });

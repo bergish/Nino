@@ -3,26 +3,26 @@ include ../mixins
 doctype html
 
 html(lang="en", ng-app="BoilerplateApp")
-	head
-		meta(charset="utf-8")
-		link(rel="shortcut icon", href="/media/img/favicon.ico")
-		title Boilerplate
-		
-		base(href="/")
-		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		meta(name="description", content="Do Stuff")
+    head
+        meta(charset="utf-8")
+        link(rel="shortcut icon", href="/media/img/favicon.ico")
+        title Boilerplate
+
+        base(href="/")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(name="description", content="Do Stuff")
         meta(name="author", content="ofir123")
-		
-		{% if config.DEBUG %}
-		
-		// Including livereload in production will cause a performance hit for users,
-		// so django will not emit the following line if the settings are not set to debug.
-		// buildCfg is provided by gulp and is the same as build.config.js.
-		+script("http://localhost:" + buildCfg.liveReloadPort + "/livereload.js?snipver=1")
-		
-		{% endif %}
-		
-		+script("http://code.jquery.com/jquery-2.1.0.min.js")
+
+        {% if config.DEBUG %}
+
+        // Including livereload in production will cause a performance hit for users,
+        // so django will not emit the following line if the settings are not set to debug.
+        // buildCfg is provided by gulp and is the same as build.config.js.
+        +script("http://localhost:" + buildCfg.liveReloadPort + "/livereload.js?snipver=1")
+
+        {% endif %}
+
+        +script("http://code.jquery.com/jquery-2.1.0.min.js")
         +style("https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
         +style("https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css")
         +script("https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
@@ -39,10 +39,9 @@ html(lang="en", ng-app="BoilerplateApp")
         +script("https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js")
         +style("https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.2.0/select.min.css")
         +script("https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.2.0/select.min.js")
-		
-		+style("/media/build/app.css")
-		+script("/media/build/app.js")
-		
-	body(ng-cloak)
-		div#wrapper(ui-view)
-		
+
+        +style("/media/build/app.css")
+        +script("/media/build/app.js")
+
+    body(ng-cloak)
+        div#wrapper(ui-view)
